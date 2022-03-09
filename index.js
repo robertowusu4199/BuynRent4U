@@ -33,7 +33,7 @@ Server.use(apartmentRoutes)
 Server.use(cloudinaryRoutes)
 
 
-const port = 7000 || process.env.PORT 
+const port = process.env.PORT || 7000     
 
 
 Server.use((error, request, response, next) => {
