@@ -33,7 +33,7 @@ Server.use(apartmentRoutes)
 Server.use(cloudinaryRoutes)
 
 
-const port = process.env.PORT || 7000     
+const PORT = process.env.PORT || 7000     
 
 
 Server.use((error, request, response, next) => {
@@ -50,8 +50,8 @@ mongoose.connect(
 )
 .then(result => {
     
-    Server.listen(port, () => {
-        console.log(`Server is running on port ${port}`)
+    Server.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`)
     })
 
 }).catch(err => console.log(err))
