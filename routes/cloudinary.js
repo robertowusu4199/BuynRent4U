@@ -55,7 +55,7 @@ router.post('/upload', fileUpload.single('image'), function (req, res, next) {
 });
 
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/deleteimage", async (req, res, next) => {
   const {id} = req.body
   try {
     await cloudinary.uploader.destroy(id)
