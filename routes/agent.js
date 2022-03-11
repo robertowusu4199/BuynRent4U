@@ -39,7 +39,7 @@ createAgentController)
 
 
 //Update 
-router.put("/agent", isAuth, [
+router.put("/agentupdate", isAuth, [
     body("location").trim().not().isEmpty().withMessage("Location cannot be empty"),
     body("phone").trim().not().isEmpty().withMessage("Phone cannot be empty"),
     body("gps").trim().not().isEmpty().withMessage("gps cannot be empty"),
