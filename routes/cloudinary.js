@@ -35,9 +35,13 @@ router.post('/upload', fileUpload.single('image'), function (req, res, next) {
           let stream = cloudinary.uploader.upload_stream(
             (error, result) => {
               if (result) {
-                resolve(result);
+                resolve(result)
+                res.status(200)
+                .json("successfully uploaded");
               } else {
-                reject(error);
+                reject(error)
+                res.status(400)
+                .json("Something went wrong...");
               }
             }
           );
