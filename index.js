@@ -4,11 +4,17 @@ const mongoose = require("mongoose")
 const agentRoutes = require("./routes/agent")
 const userRoutes = require("./routes/user")
 const apartmentRoutes = require("./routes/apartment")
+const flatRoutes = require("./routes/flat")
 const cloudinaryRoutes = require("./routes/cloudinary")
+const multercloudianryRoutes = require("./routes/multercloudinary")
 const dotenv = require('dotenv');
 dotenv.config();
 const cors = require("cors")
 const cookieParser = require('cookie-parser')
+
+const passport = require("passport")
+const passportRoutes = require("./routes/passport")
+
 
 // const dotenv = require("dotenv")
 
@@ -16,7 +22,14 @@ const cookieParser = require('cookie-parser')
 
 // console.log(test)
 
+
+
+
+
 const Server = express()
+
+
+
 
 //Server.use = cors()
 Server.use(cors({ origin: true }))
@@ -30,10 +43,16 @@ Server.use(express.urlencoded({limit: "50mb", extended: true}))
 Server.use(agentRoutes)
 Server.use(userRoutes)
 Server.use(apartmentRoutes)
+Server.use(flatRoutes)
 Server.use(cloudinaryRoutes)
+Server.use(multercloudianryRoutes)
+Server.use(passportRoutes)
 
 
-const PORT = 7000     
+Server.use(passport.initialize())
+
+
+const PORT = 7000      //process.env.PORT
 
 
 
