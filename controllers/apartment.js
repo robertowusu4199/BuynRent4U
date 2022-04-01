@@ -12,7 +12,7 @@ const listApartmentController = (req, res) => {
     if(id){
         
         ApartmentModel.find({_id: id}).then( apartment => {
-            res.json({data: apartment})
+            res.status(200).json({data: apartment})
         }).catch(err => console.log(err))
     } else {
         
@@ -21,7 +21,7 @@ const listApartmentController = (req, res) => {
         ApartmentModel.find()
           .populate("agentId", "firstname lastname phone location -_id")
           .then(apartment => {
-            res.json({ data: apartment })
+            res.status(200).json({ data: apartment })
         }).catch(err => console.log(err))
     }
 }
@@ -34,7 +34,7 @@ const createApartmentController = (req, res) => {
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
         console.log(errors)
-        return res.json({ message: errors.array()[0].msg })
+        return res.status(400).json({ message: errors.array()[0].msg })
     }
 
     //Create an aparment
@@ -48,7 +48,7 @@ const createApartmentController = (req, res) => {
 
     apartment.save().then(result => {
 
-        res.json({ message: "create successful", data: result })
+        res.status(200).json({ message: "create successful", data: result })
 
     }).catch(error => console.log(error))
 
@@ -75,7 +75,7 @@ const updateApartmentController = (req, res) => {
 
             apartment.save()
             
-            res.status(202)
+            res.status(200)
             .json({message: "update successful", data: apartment})
         }
 
@@ -92,10 +92,10 @@ const deleteApartmentController = (req, res) => {
     
     ApartmentModel.findByIdAndRemove(id).then(deletedApartment => {              
         if(deletedApartment){
-            res.json({message: "Apartment deleted", data: deletedApartment}) 
+            res.status(200).json({message: "Apartment deleted", data: deletedApartment}) 
             return
         }
-        res.json({message: "Apartment not found"})
+        res.status(400).json({message: "Apartment not found"})
     })
 
 }
