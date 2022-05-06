@@ -21,7 +21,7 @@ const isAuth = (req, res, next) => {
 
     } catch (error) {
         console.log(error)
-        res.json({message: error.message})
+        res.status(400).json({message: error.message})
     }
 }
 
