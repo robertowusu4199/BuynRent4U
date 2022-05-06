@@ -20,16 +20,16 @@ router.get("/apartments/:id?", listApartmentController)
 
 //Create
 router.post("/apartment", [                 
-    body("typeOfHouse").trim().not().isEmpty().withMessage("typeOfHouse cannot be empty"),
-    body("province").trim().not().isEmpty().withMessage("Province cannot be empty"),
-    body("city").trim().not().isEmpty().withMessage("City cannot be empty"),
-    body("price").trim().not().isEmpty().withMessage("Price cannot be empty"),
-    body("gpsAddress").trim().not().isEmpty().withMessage("GPS Address cannot be empty"),
-    body("isSaleOrRent").trim().not().isEmpty().withMessage("IsSaleOrRent cannot be empty"),    
-    body("numOfBedRooms").trim().not().isEmpty().withMessage("NumOfBedRooms cannot be empty"),    
-    body("numOfBathRooms").trim().not().isEmpty().withMessage("NumOfBathRooms cannot be empty"),    
-    body("numOfGarages").trim().not().isEmpty().withMessage("NumOfGarages cannot be empty"),
-    body("agentId").trim().not().isEmpty().withMessage("AgentId cannot be empty"),    
+  body("province").trim().not().isEmpty().withMessage("Province cannot be empty"),
+  body("city").trim().not().isEmpty().withMessage("City cannot be empty"),
+  body("price").trim().not().isEmpty().withMessage("Price cannot be empty"),
+  body("years").trim().not().isEmpty().withMessage("Years cannot be empty"),
+  body("gpsAddress").trim().not().isEmpty().withMessage("GPS Address cannot be empty"),
+  body("isSaleOrRent").trim().not().isEmpty().withMessage("IsSaleOrRent cannot be empty"),    
+  body("numOfBedRooms").trim().not().isEmpty().withMessage("NumOfBedRooms cannot be empty"),    
+  body("numOfBathRooms").trim().not().isEmpty().withMessage("NumOfBathRooms cannot be empty"),    
+  body("numOfGarages").trim().not().isEmpty().withMessage("NumOfGarages cannot be empty"),
+  body("userId").trim().not().isEmpty().withMessage("userId cannot be empty"),    
 ],           
 createApartmentController)
 
@@ -37,10 +37,10 @@ createApartmentController)
 
 //Update
 router.put('/updateApartment',[
-  body("typeOfHouse").trim().not().isEmpty().withMessage("typeOfHouse cannot be empty"),
   body("province").trim().not().isEmpty().withMessage("Province cannot be empty"),
   body("city").trim().not().isEmpty().withMessage("City cannot be empty"),
   body("price").trim().not().isEmpty().withMessage("Price cannot be empty"),
+  body("years").trim().not().isEmpty().withMessage("Years cannot be empty"),
   body("gpsAddress").trim().not().isEmpty().withMessage("GPS Address cannot be empty"),
   body("isSaleOrRent").trim().not().isEmpty().withMessage("IsSaleOrRent cannot be empty"),    
   body("numOfBedRooms").trim().not().isEmpty().withMessage("NumOfBedRooms cannot be empty"),    

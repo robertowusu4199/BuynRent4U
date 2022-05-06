@@ -8,6 +8,8 @@ const {forgotPassword} = require("../controllers/users")
 const {resetPassword} = require("../controllers/users")
 const {googleLogin} = require("../controllers/users")
 const UserModel = require("../models/user")
+const isAuth = require("../middlewares/is-auth")
+const {listUsersController, updateUserController} = require ("../controllers/users")
 
 
 router.post("/signup",  [
@@ -25,6 +27,15 @@ router.post("/signup",  [
             if(userDoc)
             return Promise.reject("Email already taken")
         })
+    }),
+    body("phone").isMobilePhone("en-GH")
+    .custom((value, {req}) => {
+        return UserModel.findOne({"phone": value}).then(
+            UserDoc => {
+                if(UserDoc)
+                return Promise.reject("Phone number already taken")
+            }
+        ) 
     }),                                       
     body("password").trim().isLength({min:5})
 ], signupController)
@@ -51,6 +62,19 @@ router.put("/reset-password", resetPassword)
 
 
 router.post("/google-login", googleLogin) //
+
+
+
+router.get("/users/:id?", isAuth, listUsersController)
+
+
+//Update 
+router.put("/userUpdate", isAuth, [
+    body("location").trim().not().isEmpty().withMessage("Location cannot be empty"),
+    body("phone").trim().not().isEmpty().withMessage("Phone cannot be empty"),
+    body("gps").trim().not().isEmpty().withMessage("gps cannot be empty"),
+], updateUserController)
+
 
 
 module.exports = router
