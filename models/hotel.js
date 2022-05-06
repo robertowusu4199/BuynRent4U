@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 
 const Schema = mongoose.Schema
 
-const FlatSchema = new Schema({
+const HotelSchema = new Schema({
 
     province: {
         type: String, 
@@ -14,12 +14,12 @@ const FlatSchema = new Schema({
         required: true,
     },
   
-    price: {
+    priceForNight: {
         type: Number,
         required: true,
     },
-
-    years: {
+  
+    priceForDay: {
         type: Number,
         required: true,
     },
@@ -28,35 +28,16 @@ const FlatSchema = new Schema({
         type: String,
         required: true
     },
-
-    isSaleOrRent: {
-        type: String,
-        required: true,
-    },
-
-    numOfBedRooms: {
-        type: String,
-        required: true,
-    },
-        
-    numOfBathRooms: {
-        type: String,
-        required: true,
-    },
-
-    numOfGarages: {
-        type: Number,
-        required: true,
-    },
-
+    
     userId: {
         type: Schema.Types.ObjectId,
         ref: "User",
         required: true,
-    }
+    },
+
 
 })
 
-const FlatModel = mongoose.model("Flat", FlatSchema)
+const HotelModel = mongoose.model("Hotel", HotelSchema)
 
-module.exports = FlatModel
+module.exports = HotelModel

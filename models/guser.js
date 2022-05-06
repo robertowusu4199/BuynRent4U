@@ -23,4 +23,4 @@ const GuserSchema = new Schema ({
 
 })
 
-module.exports = mongoose.model("Guser", UserSchema)
+module.exports = mongoose.model("Guser", GuserSchema)

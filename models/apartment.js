@@ -3,11 +3,6 @@ const mongoose = require("mongoose")
 const Schema = mongoose.Schema
 
 const ApartmentSchema = new Schema({
-    
-    typeOfHouse: {
-        type: String,
-        required: true,
-    },
 
     province: {
         type: String, 
@@ -20,6 +15,11 @@ const ApartmentSchema = new Schema({
     },
   
     price: {
+        type: Number,
+        required: true,
+    },
+
+    years: {
         type: Number,
         required: true,
     },
@@ -49,9 +49,9 @@ const ApartmentSchema = new Schema({
         required: true,
     },
 
-    agentId: {
+    userId: {
         type: Schema.Types.ObjectId,
-        ref: "Agent",
+        ref: "User",
         required: true,
     }
 

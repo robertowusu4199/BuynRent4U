@@ -2,7 +2,7 @@ const mongoose = require("mongoose")
 
 const Schema = mongoose.Schema
 
-const FlatSchema = new Schema({
+const VillaSchema = new Schema({
 
     province: {
         type: String, 
@@ -57,6 +57,6 @@ const FlatSchema = new Schema({
 
 })
 
-const FlatModel = mongoose.model("Flat", FlatSchema)
+const VillaModel = mongoose.model("Villa", VillaSchema)
 
-module.exports = FlatModel
+module.exports = VillaModel
