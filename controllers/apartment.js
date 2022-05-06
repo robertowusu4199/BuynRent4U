@@ -19,7 +19,7 @@ const listApartmentController = (req, res) => {
         //Fetching a related info of the agent
 
         ApartmentModel.find()
-          .populate("agentId", "firstname lastname phone location -_id")
+          .populate("userId", "firstname lastname phone location -_id")
           .then(apartment => {
             res.status(200).json({ data: apartment })
         }).catch(err => console.log(err))
@@ -38,17 +38,17 @@ const createApartmentController = (req, res) => {
     }
 
     //Create an aparment
-    const { typeOfHouse, province, city, price, gpsAddress, isSaleOrRent, 
-        numOfBedRooms, numOfBathRooms, numOfGarages, agentId } = req.body
+    const { province, city, price, years, gpsAddress, isSaleOrRent, 
+        numOfBedRooms, numOfBathRooms, numOfGarages, userId } = req.body
 
     const apartment = new ApartmentModel({
-        typeOfHouse, province, city, price, gpsAddress, isSaleOrRent, 
-        numOfBedRooms, numOfBathRooms, numOfGarages, agentId
+        province, city, price, years, gpsAddress, isSaleOrRent, 
+        numOfBedRooms, numOfBathRooms, numOfGarages, userId
     })
 
     apartment.save().then(result => {
 
-        res.status(200).json({ message: "create successful", data: result })
+        res.status(200).json({ message: "Create successful", data: result })
 
     }).catch(error => console.log(error))
 
@@ -58,15 +58,15 @@ const createApartmentController = (req, res) => {
 
 const updateApartmentController = (req, res) => {
     //Update an apartment
-    const {id, typeOfHouse, province, city, price, gpsAddress, isSaleOrRent, 
+    const {id, province, city, price, years, gpsAddress, isSaleOrRent, 
         numOfBedRooms, numOfBathRooms, numOfGarages} = req.body 
     
-    ApartmentModel.findById({_id: id}).then(apartment => {
+     ApartmentModel.findById({_id: id}).then(apartment => {
         if(apartment){
-            apartment.typeOfHouse = typeOfHouse;
             apartment.province = province;
             apartment.city = city;
             apartment.price = price;
+            apartment.years = years;
             apartment.gpsAddress = gpsAddress;
             apartment.isSaleOrRent = isSaleOrRent;
             apartment.numOfBedRooms = numOfBedRooms;
@@ -76,10 +76,11 @@ const updateApartmentController = (req, res) => {
             apartment.save()
             
             res.status(200)
-            .json({message: "update successful", data: apartment})
-        }
+            .json({message: "Update successful", data: apartment})
 
-        //res.json({message: "details cannot be found"})
+        }else{
+            res.json({message: "Details cannot be found"})
+        }
 
     }).catch(err => console.log(err))  
 }

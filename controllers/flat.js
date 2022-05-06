@@ -19,7 +19,7 @@ const listFlatController = (req, res) => {
         //Fetching a related info of the agent
 
         FlatModel.find()
-          .populate("agentId", "firstname lastname phone location -_id")
+          .populate("userId", "firstname lastname phone location -_id")
           .then(flat => {
             res.status(200).json({ data: flat })
         }).catch(err => console.log(err))
@@ -38,17 +38,17 @@ const createFlatController = (req, res) => {
     }
 
     //Create an flat
-    const { typeOfHouse, province, city, price, gpsAddress, isSaleOrRent, 
-        numOfBedRooms, numOfBathRooms, numOfGarages, agentId } = req.body
+    const { province, city, price, years, gpsAddress, isSaleOrRent, 
+        numOfBedRooms, numOfBathRooms, numOfGarages, userId } = req.body
 
     const flat = new FlatModel({
-        typeOfHouse, province, city, price, gpsAddress, isSaleOrRent, 
-        numOfBedRooms, numOfBathRooms, numOfGarages, agentId
+        province, city, price, years, gpsAddress, isSaleOrRent, 
+        numOfBedRooms, numOfBathRooms, numOfGarages, userId
     })
 
     flat.save().then(result => {
 
-        res.status(200).json({ message: "create successful", data: result })
+        res.status(200).json({ message: "Create successful", data: result })
 
     }).catch(error => console.log(error))
 
@@ -58,15 +58,15 @@ const createFlatController = (req, res) => {
 
 const updateFlatController = (req, res) => {
     //Update an flat
-    const {id, typeOfHouse, province, city, price, gpsAddress, isSaleOrRent, 
+    const {id, province, city, price, years, gpsAddress, isSaleOrRent, 
         numOfBedRooms, numOfBathRooms, numOfGarages} = req.body 
     
      FlatModel.findById({_id: id}).then(flat => {
         if(flat){
-            flat.typeOfHouse = typeOfHouse;
             flat.province = province;
             flat.city = city;
             flat.price = price;
+            flat.years = years;
             flat.gpsAddress = gpsAddress;
             flat.isSaleOrRent = isSaleOrRent;
             flat.numOfBedRooms = numOfBedRooms;
@@ -76,10 +76,11 @@ const updateFlatController = (req, res) => {
             flat.save()
             
             res.status(200)
-            .json({message: "update successful", data: flat})
+            .json({message: "Update successful", data: flat})
+            
+        }else{
+            res.json({message: "Details cannot be found"})
         }
-
-        //res.json({message: "details cannot be found"})
 
     }).catch(err => console.log(err))  
 }

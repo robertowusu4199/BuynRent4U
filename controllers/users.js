@@ -26,10 +26,10 @@ const signupController = (req, res) => {
         return res.json({ message: errors.array()[0].msg })
     }
 
-    const { firstname, lastname, email, gender, password } = req.body
+    const { firstname, lastname, email, gender, phone, location, password } = req.body
 
 
-    const token = jwt.sign({ firstname, lastname, email, gender, password }, process.env.JWT_ACC_ACTIVATE, { expiresIn: "20m" })
+    const token = jwt.sign({ firstname, lastname, email, gender, phone, location, password }, process.env.JWT_ACC_ACTIVATE, { expiresIn: "20m" })
 
 
     const data = {
@@ -37,8 +37,8 @@ const signupController = (req, res) => {
         to: email,
         subject: "Account Activation Link",
         html: `
-            <h2>Please click on given link to activate you account</h2>
-            <p>/authentication/activate${token}</p>
+            <h2>Please click on given link to activate you account:</h2>
+            <a href="${process.env.BASE_URL},${token}"><p>/authentication/activate${process.env.BASE_URL},${token}</p></a>
         `
     };
 
@@ -64,15 +64,16 @@ const activateAccount = (req, res) => {
             if (err) {
                 return res.status(400).json({ error: "Incorrect or Expired link." })
             }
-            const { firstname, lastname, gender, email, password } = decodedToken
+            const { firstname, lastname, gender, email, phone, location, password } = decodedToken
             bcrypt.hash(password, 10).then(hashedPassword => {
-                const user = new UserModel({ firstname, lastname, gender, email, password: hashedPassword })
+                const user = new UserModel({ firstname, lastname, gender, email, phone, location, password: hashedPassword })
 
                 user.save().then(user => {
                     res.status(200).json({
                         "message": "Sign up successful", "data": {
                             firstname: user.firstname, lastname: user.lastname,
                             gender: user.gender, email: user.email,
+                            phone: user.phone, location: user.location,
                         }
                     })
                 }).catch(err => console.log(err))
@@ -114,11 +115,11 @@ const signinController = async (req, res) => {
             { name: user.name, email: user.email, userId: user.password },
             "superscretkey",
             { expiresIn: "4h" })
-        return res.status(200).json({ message: "user signed in", token })
+        return res.status(200).json({ message: "User signed in", token })
 
     } catch (error) {
-        // res.json({ message: "Server error. Please try again" })    //Cannot set headers after they are sent to the client
-    }
+        res.json({ message: "Server error. Please try again" })
+    } 
 
 }
 
@@ -146,7 +147,7 @@ const forgotPassword = async (req, res) => {
 
         return user.updateOne({ restLink: token }, function (err, success) {
             if (err) {
-                return res.status(400).json({ error: "reset password link error" })
+                return res.status(400).json({ error: "Reset password link error" })
             } else {
                 mg.messages().send(data, function (error, body) {
                     if (error) {
@@ -185,7 +186,7 @@ const resetPassword = async (req, res) => {
                 user = _.extend(user, obj)
                 user.save((err, result) => {
                     if (err) {
-                        return res.status(400).json({ error: "reset password error" })
+                        return res.status(400).json({ error: "Reset password error" })
                     } else {
                         return res.status(200).json({ message: "Your password has been changed." })
                     }
@@ -250,6 +251,47 @@ const googleLogin = (req, res) => {
 }
 
 
+const listUsersController = (req, res) => {
+    //Find users by id
+
+    const {id} = req.params
+
+    if(id){
+
+        UserModel.find({ _id: id}).then(users => {
+            res.status(200).json({ message: "Successful",  data: users })
+        }).catch(err => console.log(err))
+    } else {
+        UserModel.find().then(users => {
+            res.status(200).json({ message: "Successful",  data: users })
+        }).catch(err => console.log(err))
+    }
+}
+
+
+const updateUserController = (req, res) => {
+    //Agent update
+    const {id, location, phone, gps} = req.body 
+    
+    UserModel.findById({_id: id}).then(user => {
+        if(agent){
+            user.location = location;
+            user.phone = phone;
+            user.gps = gps;
+
+            user.save()
+            
+            res.status(200)
+            .json({message: "Update Successful", data: user})
+
+        }else{
+            res.json({message: "Cannot be found"})
+        }
+
+
+    }).catch(err => console.log(err))
+
+}
 
 
 
@@ -261,4 +303,6 @@ module.exports = {
     forgotPassword,
     resetPassword,
     googleLogin,
+    listUsersController,
+    updateUserController,
 }
