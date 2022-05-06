@@ -1,19 +1,26 @@
 const express = require("express")
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
-const agentRoutes = require("./routes/agent")
+const session = require("express-session")
 const userRoutes = require("./routes/user")
 const apartmentRoutes = require("./routes/apartment")
 const flatRoutes = require("./routes/flat")
-const cloudinaryRoutes = require("./routes/cloudinary")
-const multercloudianryRoutes = require("./routes/multercloudinary")
+const villaRoutes = require("./routes/villa")
+const hotelRoutes = require("./routes/hotel")
+const expressLayouts = require('express-ejs-layouts')
+const viewEngine = require('view-engine')
+const usaRoutes = require('./routes/usa')
+const indexRoutes = require('./routes/index')
+const passport = require("passport")
+
 const dotenv = require('dotenv');
 dotenv.config();
 const cors = require("cors")
 const cookieParser = require('cookie-parser')
 
-const passport = require("passport")
-const passportRoutes = require("./routes/passport")
+
+require('./config/passport')(passport)
+
 
 
 // const dotenv = require("dotenv")
@@ -24,12 +31,13 @@ const passportRoutes = require("./routes/passport")
 
 
 
-
-
 const Server = express()
 
 
+const app = express()
 
+app.set('view engine', 'ejs')
+app.use(expressLayouts);
 
 //Server.use = cors()
 Server.use(cors({ origin: true }))
@@ -40,16 +48,23 @@ Server.use(express.json({limit: "50mb"}))
 Server.use(express.urlencoded({limit: "50mb", extended: true}))
  
 
-Server.use(agentRoutes)
 Server.use(userRoutes)
 Server.use(apartmentRoutes)
 Server.use(flatRoutes)
-Server.use(cloudinaryRoutes)
-Server.use(multercloudianryRoutes)
-Server.use(passportRoutes)
+Server.use(villaRoutes)
+Server.use(hotelRoutes)
+Server.use(usaRoutes)
+Server.use(indexRoutes)
 
 
+Server.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: true }
+}))
 Server.use(passport.initialize())
+Server.use(passport.session())
 
 
 const PORT = 7000      //process.env.PORT
